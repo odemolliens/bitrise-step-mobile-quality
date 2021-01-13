@@ -25,7 +25,7 @@ workflows:
         - path: ./_tmp
         - is_create_path: true
     - path::./:
-        title: Step Test
+        title: Mobile quality monitorring
         description: |-
           The example input has a default value,
           you can overwrite it if you want to, just like we did below,

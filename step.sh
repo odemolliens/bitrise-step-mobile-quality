@@ -63,9 +63,9 @@ if [[ ${check_android} == "yes" ]]; then
         # decompile the apk
         apktool d android.apk -o apk_decompiled
     else
-        # we will decompile the apk from BITRISE_APK_PATH
-        if [[ ${BITRISE_APK_PATH} == "" ]]; then
-            echo "ERROR: Didn't find any apk file in your artifacts BITRISE_APK_PATH=$BITRISE_APK_PATH"
+        # we will decompile the apk from android_apk_path
+        if [[ ${android_apk_path} == "" ]]; then
+            echo "ERROR: Didn't find any apk file, please check android apk path (android_apk_path=$android_apk_path)"
             exit 1
         fi
 
@@ -73,7 +73,7 @@ if [[ ${check_android} == "yes" ]]; then
         brew install apktool || true
 
         # decompile the apk
-        apktool d $BITRISE_APK_PATH -o apk_decompiled
+        apktool d $android_apk_path -o apk_decompiled
     fi
 
     # PERMISSION CHECK - count permissions which are into current build's manifest
@@ -123,14 +123,14 @@ if [[ ${check_ios} == "yes" ]]; then
         unzip ios.ipa
         mv Payload ios_unzipped/
     else
-        # we will decompile the ipa from BITRISE_IPA_PATH
-        if [[ ${BITRISE_IPA_PATH} == "" ]]; then
-            echo "ERROR: Didn't find any ipa file in your artifacts BITRISE_IPA_PATH=$BITRISE_IPA_PATH"
+        # we will decompile the ipa from ios_ipa_path
+        if [[ ${ios_ipa_path} == "" ]]; then
+            echo "ERROR: Didn't find any apk file, please check ios ipa path (ios_ipa_path=$ios_ipa_path)"
             exit 1
         fi
 
         mkdir ios_unzipped
-        unzip $BITRISE_IPA_PATH -d ios_unzipped/
+        unzip $ios_ipa_path -d ios_unzipped/
     fi
 
     # PERMISSION CHECK - count permissions which are into current info.plist
