@@ -51,7 +51,7 @@ toolkit:
   bash:
     entry_file: step.sh
 inputs:
-  - check_android:
+  - check_android: "yes"
     opts:
       title: "Check Android"
       summary: "Do you want check android part?"
@@ -61,7 +61,7 @@ inputs:
       value_options:
         - "yes"
         - "no"
-  - check_ios:
+  - check_ios: "yes"
     opts:
       title: "Check iOS"
       summary: "Do you want check iOS part?"
