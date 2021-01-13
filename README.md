@@ -1,7 +1,8 @@
-<img align="right" src="assets/icon.svg">
+<img align="right" src="assets/icon.svg" width="150" height="150" >
+
 # Bitrise step - Mobile app quality check & monitor
 
-Check native mobbile app quality
+Check native mobile app quality
 
 ## Usage
 
@@ -9,11 +10,11 @@ Add this step using standard Workflow Editor and provide required input environm
 
 ### Input
 
-`Check Android` - yes/no - To set to yes if you want check android part
+`Check Android` - yes/no - Set yes if you want check android part
 
-`Check iOS` - yes/no - To set to yes if you want check ios part
+`Check iOS` - yes/no - Set yes if you want check ios part
 
-`External Build slug` - Build slug if you have your APK and/or IPA exported as artifact in another bitrise build
+`External Build slug` - If you have your APK and/or IPA exported as artifact in another bitrise build
 
 ###### Config
 
@@ -40,7 +41,7 @@ Add this step using standard Workflow Editor and provide required input environm
 
 `NEW_IPA_SIZE` - new generated iOS app's size
 
-`ANDROID_PERMISSIONS_COUNT` new generated Android app's permission count
+`ANDROID_PERMISSIONS_COUNT` - new generated Android app's permission count
 
 `NEW_APK_SIZE` new generated Android app's size
 

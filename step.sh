@@ -23,7 +23,7 @@ fi
 
 if [[ ${alert_threshold} == ""  ]]; then
     alert_threshold="5"
-file
+fi
 
 # install jq to parse json content
 brew install jq || true

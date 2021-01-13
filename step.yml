@@ -39,7 +39,7 @@ type_tags:
   - utility
 is_requires_admin_user: false
 is_always_run: true
-is_skippable: true
+is_skippable: false
 deps:
   brew:
   - name: git
