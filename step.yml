@@ -13,11 +13,11 @@ summary: |
   Check and monitor mobile application's quality
 description: |
   Check mobile application's quality, it can be an APK and/or IPA file. Among other things, you can:
-  - setup a config file, or directly on step's input, the value related to released app to compare the values on each new release candidate .eg, to be aware on each new permission and/or app size increased 
+  - setup a config file, or directly on step's input, the value related to released app to compare the values on each new release candidate .eg, to be aware on each new permission and/or app size increased
   - generate a report file where we will display the result of different check
 
-  ### Troubleshooting 
-  
+  ### Troubleshooting
+
   - Be aware, you have to launch this step after the compilation step ("Android Build" for android, "Xcode Archive" for iOS)
   - Launch "Deploy to Bitrise.io" step after this one to deploy report files to artifacts
 
@@ -51,7 +51,7 @@ toolkit:
   bash:
     entry_file: step.sh
 inputs:
-  - check_android: 
+  - check_android:
     opts:
       title: "Check Android"
       summary: "Do you want check android part?"
@@ -61,7 +61,7 @@ inputs:
       value_options:
         - "yes"
         - "no"
-  - check_ios: 
+  - check_ios:
     opts:
       title: "Check iOS"
       summary: "Do you want check iOS part?"
@@ -71,7 +71,7 @@ inputs:
       value_options:
         - "yes"
         - "no"
-  - config_file_path: 
+  - config_file_path:
     opts:
       title: "Config file path"
       summary: "Path of the config file"
@@ -95,8 +95,15 @@ inputs:
       description: |
         If you use this step in the same build where you generated the APK
       is_expand: false
-      is_required: false
-  - android_apk_size: 
+      is_required: true
+  - ios_ipa_path: "$BITRISE_IPA_PATH"
+    opts:
+      title: "IPA path"
+      description: |
+        If you use this step in the same build where you generated the ipa
+      is_expand: false
+      is_required: true
+  - android_apk_size:
     opts:
       title: "Android APK size"
       summary: "Android APK size (MB)"
@@ -107,13 +114,13 @@ inputs:
         Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
       is_expand: false
       is_required: false
-  - android_permission_count: 
+  - android_permission_count:
     opts:
       title: "Android permission"
       summary: "Number of permission into your AndroidManifest.xml"
       description: |
         Set this key if you want to follow up the count of permission used by your android app and be aware when useless permission added to your AndroidManifest.xml
-        
+
         To know how many permission you have currently in your app, you can check your APK's manifest to know the exact count.
 
         You can add a config file where you can add all application information and set `config_file_path` to find it.
@@ -121,14 +128,7 @@ inputs:
         Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
       is_expand: false
       is_required: false
-  - ios_ipa_path: "$BITRISE_IPA_PATH"
-    opts:
-      title: "IPA path"
-      description: |
-        If you use this step in the same build where you generated the ipa
-      is_expand: false
-      is_required: false
-  - ios_app_name: 
+  - ios_app_name:
     opts:
       title: "iOS app name (Display Name)"
       description: |
@@ -138,7 +138,7 @@ inputs:
         You can find it on xcode -> General -> Display Name
       is_expand: false
       is_required: true
-  - ios_ipa_size: 
+  - ios_ipa_size:
     opts:
       title: "iOS IPA size"
       summary: "iOS IPA size (MB)"
@@ -149,7 +149,7 @@ inputs:
         Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
       is_expand: false
       is_required: false
-  - ios_permission_count: 
+  - ios_permission_count:
     opts:
       title: "iOS permission"
       summary: "Number of permission into your Info.plist"
