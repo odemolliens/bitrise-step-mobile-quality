@@ -1,0 +1,185 @@
+#
+# A couple of useful guides & docs:
+#
+# - Main Bitrise CLI docs: https://github.com/bitrise-io/bitrise/tree/master/_docs
+# - Step Development Guideline: https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md
+# - Bitrise.yml format spec: https://github.com/bitrise-io/bitrise/blob/master/_docs/bitrise-yml-format-spec.md
+# - Bitrise docs: http://devcenter.bitrise.io/
+# - Bitrise CLI guides: http://devcenter.bitrise.io/bitrise-cli/
+
+title: |-
+  steps-mobile-quality
+summary: |
+  Check mobile application's quality
+description: |
+  Check mobile application's quality, it can be an apk and/or ipa file. Among other things, you can:
+  - setup a config file, or directly on step's input, the value related to released app to compare the values on each new release candidate .eg, to be aware on each new permission and/or app size increased 
+  - generate a report file where we will display the result of different check
+
+  ### Troubleshooting 
+  
+  - Be aware, you have to launch this step after the compilation step ("Android Build" for android, "Xcode Archive" for iOS)
+  - Launch "Deploy to Bitrise.io" step after this one to deploy report files to artifacts
+
+website: https://github.com/imranMnts/bitrise-step-mobile-quality
+source_code_url: https://github.com/imranMnts/bitrise-step-mobile-quality
+support_url: https://github.com/imranMnts/bitrise-step-mobile-quality/issues
+host_os_tags:
+  - osx-10.10
+  - ubuntu-16.04
+project_type_tags:
+  - ios
+  - android
+  - react-native
+  - flutter
+type_tags:
+  - utility
+is_requires_admin_user: false
+is_always_run: true
+is_skippable: true
+deps:
+  brew:
+  - name: git
+  - name: wget
+  apt_get:
+  - name: git
+  - name: wget
+toolkit:
+  bash:
+    entry_file: step.sh
+
+inputs:
+  - check_android: 
+    opts:
+      title: "Android"
+      summary: "Do you want check android part?"
+      description: "To launch or not android quality check"
+      is_expand: true
+      is_required: true
+      value_options:
+        - "yes"
+        - "no"
+
+  - check_ios: 
+    opts:
+      title: "iOS"
+      summary: "Do you want check iOS part?"
+      description: "To launch or not iOS quality check"
+      is_expand: true
+      is_required: true
+      value_options:
+        - "yes"
+        - "no"
+
+  - config_file_path: 
+    opts:
+      title: "Config file"
+      summary: "Path of the config file"
+      description: |
+        The config file where we have some informations like the current android app size .eg, to compare with next builds and alert if needed.
+        If you want use Environment Variables instead of the config file, do not set this key and add variables. (See README to see all needed variables)
+      is_expand: false
+      is_required: false
+      
+  - outside_build_slug:
+    opts:
+      title: "Build slug"
+      summary: "Build slug of the build where you have the apk/ipa into artifacts"
+      description: |
+        You can use the artifacts from another bitrise build of the same project.
+        If you launch this step on the build where you launched Android build step .eg, you don't have to set this key
+      is_expand: false
+      is_required: false
+
+  - android_apk_size: 
+    opts:
+      title: "Android apk"
+      summary: "Android apk size (MB)"
+      description: |
+        Set this key if you want to follow up on your project's android apk size
+        You can add a config file where you can add all application information and set `config_file_path` to find it.
+
+        Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
+      is_expand: false
+      is_required: false
+
+  - android_permission_count: 
+    opts:
+      title: "Android permission"
+      summary: "Number of permission into your AndroidManifest.xml"
+      description: |
+        Set this key if you want to follow up the count of permission used by your android app and be aware when useless permission added to your AndroidManifest.xml
+        
+        To know how many permission you have currently in your app, you can check your apk's manifest to know the exact count.
+
+        You can add a config file where you can add all application information and set `config_file_path` to find it.
+
+        Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
+      is_expand: false
+      is_required: false
+
+  - ios_app_name: 
+    opts:
+      title: "iOS app name (Display Name)"
+      description: |
+        You have to set this key if you want check ios quality.
+        If not, you can set an empty string.
+
+        You can find it on xcode -> General -> Display Name
+      is_expand: false
+      is_required: true
+
+  - ios_ipa_size: 
+    opts:
+      title: "iOS ipa"
+      summary: "iOS ipa size (MB)"
+      description: |
+        Set this key if you want follow up your project's ios ipa size
+        You can add a config file where you can add all application information and set `config_file_path` to find it.
+
+        Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
+      is_expand: false
+      is_required: false
+
+  - ios_permission_count: 
+    opts:
+      title: "iOS permission"
+      summary: "Number of permission into your Info.plist"
+      description: |
+        Set this key if you want to follow up the count of permission used by your ios app and be aware when useless permission added to your Info.plist
+        To know how many permission you have currently in your app, you can check your ipa's Info.plist to know the exact count.
+
+        You can add a config file where you can add all application information and set `config_file_path` to find it.
+
+        Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
+      is_expand: false
+      is_required: false
+
+  - alert_threshold: "5"
+    opts:
+      title: "Size threshold "
+      summary: "Threshold to alert when app size increase (MB)"
+      is_expand: true
+      is_required: true
+      value_options:
+        - "3"
+        - "5"
+        - "10"
+        - "20"
+
+outputs:
+  - IOS_PERMISSIONS_COUNT: 
+
+outputs:
+  - IOS_PERMISSIONS_COUNT:
+    opts:
+      title: Current build's ios permission count
+  - NEW_IPA_SIZE:
+    opts:
+      title: Current build's ios ipa size (MB)
+  - ANDROID_PERMISSIONS_COUNT:
+    opts:
+      title: Current build's android permission count
+  - NEW_APK_SIZE:
+    opts:
+      title: Current build's android apk size (MB)
