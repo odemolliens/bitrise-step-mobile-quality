@@ -30,18 +30,18 @@ Add this step using standard Workflow Editor and provide required input environm
 
 `iOS app name` - ios_app_name - iOS app name, can be found on xcode -> General -> Display Name
 
-`iOS ipa size` - ios_ipa_size - IPA's expected size (value in MB) - *not need to set if already set into your config file*
+`iOS app size` - ios_ipa_size - IPA's expected size (value in MB) - *not need to set if already set into your config file*
 
 `iOS permission` - ios_permission_count - IPA's expected permission count - *not need to set if already set into your config file*
 
 `Alert threshold` - alert_threshold - To generate an error when Android and/or iOS app's size exceeds this threshold - *not need to set if already set into your config file*
 
 ### Outputs
-`IOS_PERMISSIONS_COUNT` - new generated iOS app's permission count
+`IOS_PERMISSION_COUNT` - new generated iOS app's permission count
 
 `NEW_IPA_SIZE` - new generated iOS app's size
 
-`ANDROID_PERMISSIONS_COUNT` - new generated Android app's permission count
+`ANDROID_PERMISSION_COUNT` - new generated Android app's permission count
 
 `NEW_APK_SIZE` new generated Android app's size
 

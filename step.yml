@@ -13,7 +13,7 @@ summary: |
   Check and monitor mobile application's quality
 description: |
   Check mobile application's quality, it can be an APK and/or IPA file. Among other things, you can:
-  - setup a config file, or directly on step's input, the value related to released app to compare the values on each new release candidate .eg, to be aware on each new permission and/or app size increased
+  - setup a config file, or directly on step's input, the value related to released app to compare the values on each new release candidate eg. to be aware on each new permission and/or app size increased
   - generate a report file where we will display the result of different check
 
   ### Troubleshooting
@@ -42,11 +42,9 @@ is_always_run: true
 is_skippable: false
 deps:
   brew:
-  - name: git
-  - name: wget
-  apt_get:
-  - name: git
-  - name: wget
+  - name: jq
+  - name: apktool
+  - name: gnu-sed
 toolkit:
   bash:
     entry_file: step.sh
@@ -76,8 +74,8 @@ inputs:
       title: "Config file path"
       summary: "Path of the config file"
       description: |
-        The config file where we have some informations like the current android app size .eg, to compare with next builds and alert if needed.
-        If you want use Environment Variables instead of the config file, do not set this key and add variables. (See README to see all needed variables)
+        The config file where we have some informations like the current android app size eg. to compare with next builds and alert if needed.
+        If you want use Environment Variables instead of the config file, do not set this key and add variables. (See [README](https://github.com/imranMnts/bitrise-step-mobile-quality/blob/master/README.md) to see all needed variables)
       is_expand: false
       is_required: false
   - outside_build_slug:
@@ -86,7 +84,7 @@ inputs:
       summary: "Build slug of the build where you have the APK/IPA into artifacts"
       description: |
         You can use the artifacts from another bitrise build of the same project.
-        If you launch this step on the build where you launched Android build step .eg, you don't have to set this key
+        If you launch this step on the build where you launched Android build step eg. you don't have to set this key
       is_expand: false
       is_required: false
   - android_apk_path: "$BITRISE_APK_PATH"
@@ -100,7 +98,7 @@ inputs:
     opts:
       title: "IPA path"
       description: |
-        If you use this step in the same build where you generated the ipa
+        If you use this step in the same build where you generated the IPA
       is_expand: false
       is_required: true
   - android_apk_size:
@@ -174,13 +172,13 @@ inputs:
         - "10"
         - "20"
 outputs:
-  - IOS_PERMISSIONS_COUNT:
+  - IOS_PERMISSION_COUNT:
     opts:
       title: Current build's ios permission count
   - NEW_IPA_SIZE:
     opts:
-      title: Current build's ios ipa size (MB)
-  - ANDROID_PERMISSIONS_COUNT:
+      title: Current build's ios IPA size (MB)
+  - ANDROID_PERMISSION_COUNT:
     opts:
       title: Current build's android permission count
   - NEW_APK_SIZE:

@@ -25,11 +25,6 @@ if [[ ${alert_threshold} == ""  ]]; then
     alert_threshold="5"
 fi
 
-# install jq to parse json content
-brew install jq || true
-# install gsed to remove text
-brew install gnu-sed || true
-
 # get current app infos
 source build_config/released_app_infos.sh
 
@@ -57,9 +52,6 @@ if [[ ${check_android} == "yes" ]]; then
         # download android apk
         curl -X GET ${ANDROID_APK_URL} -o android.apk
 
-        # tool to decompile apk
-        brew install apktool || true
-
         # decompile the apk
         apktool d android.apk -o apk_decompiled
     else
@@ -69,9 +61,6 @@ if [[ ${check_android} == "yes" ]]; then
             exit 1
         fi
 
-        # tool to decompile apk
-        brew install apktool || true
-
         # decompile the apk
         apktool d $android_apk_path -o apk_decompiled
     fi
@@ -79,8 +68,8 @@ if [[ ${check_android} == "yes" ]]; then
     # PERMISSION CHECK - count permissions which are into current build's manifest
     CURRENT_ANDROID_BUILDS_PERMISSIONS_COUNT=$(grep -o -i "<uses-permission" apk_decompiled/AndroidManifest.xml | wc -l)
     if [ $CURRENT_ANDROID_BUILDS_PERMISSIONS_COUNT -gt $android_permission_count ]; then
-        ANDROID_PERMISSIONS_COUNT=$CURRENT_ANDROID_BUILDS_PERMISSIONS_COUNT
-        envman add --key ANDROID_PERMISSIONS_COUNT --value $ANDROID_PERMISSIONS_COUNT
+        ANDROID_PERMISSION_COUNT=$CURRENT_ANDROID_BUILDS_PERMISSIONS_COUNT
+        envman add --key ANDROID_PERMISSION_COUNT --value $ANDROID_PERMISSION_COUNT
         grep "<uses-permission" apk_decompiled/AndroidManifest.xml > list_android_permissions.txt
         gsed -ri 's/<uses-permission android:name="//g' list_android_permissions.txt
         gsed -ri 's/"\/>//g' list_android_permissions.txt
@@ -136,8 +125,8 @@ if [[ ${check_ios} == "yes" ]]; then
     # PERMISSION CHECK - count permissions which are into current info.plist
     CURRENT_IOS_BUILDS_PERMISSIONS_COUNT=$(grep -o -i "UsageDescription</key>" ios_unzipped/Payload/$ios_app_name.app/Info.plist | wc -l)
     if [ $CURRENT_IOS_BUILDS_PERMISSIONS_COUNT -gt $ios_permission_count ]; then
-        IOS_PERMISSIONS_COUNT=$CURRENT_IOS_BUILDS_PERMISSIONS_COUNT
-        envman add --key IOS_PERMISSIONS_COUNT --value $IOS_PERMISSIONS_COUNT
+        IOS_PERMISSION_COUNT=$CURRENT_IOS_BUILDS_PERMISSIONS_COUNT
+        envman add --key IOS_PERMISSION_COUNT --value $IOS_PERMISSION_COUNT
         grep "UsageDescription</key>" $IOS_PLIST_PATH > list_ios_permissions.txt
         gsed -ri 's/<key>//g' list_ios_permissions.txt
         gsed -ri 's/<\/key>//g' list_ios_permissions.txt
@@ -165,10 +154,10 @@ printf "\n\n" >> quality_report.txt
 
 if [[ ${check_android} == "yes" ]]; then
     printf ">>>>>>>>>>  ANDROID  <<<<<<<<<< \n" >> quality_report.txt
-    if [[ ${ANDROID_PERMISSIONS_COUNT} != "" ]]; then
+    if [[ ${ANDROID_PERMISSION_COUNT} != "" ]]; then
     printf "!!! New Android permissions have been added !!!\n" >> quality_report.txt
     printf "We had: $android_permission_count permissions \n" >> quality_report.txt
-    printf "And now: $ANDROID_PERMISSIONS_COUNT permissions \n" >> quality_report.txt
+    printf "And now: $ANDROID_PERMISSION_COUNT permissions \n" >> quality_report.txt
     printf "You can see list of permissions into list_android_permissions.txt \n\n" >> quality_report.txt
     fi
     if [[ ${NEW_APK_SIZE} != "" ]]; then
@@ -176,7 +165,7 @@ if [[ ${check_android} == "yes" ]]; then
     printf "It weighed: $android_apk_size MB \n" >> quality_report.txt
     printf "And now: $NEW_APK_SIZE MB \n" >> quality_report.txt
     fi
-    if [[ ${ANDROID_PERMISSIONS_COUNT} == "" && ${NEW_APK_SIZE} == ""  ]]; then
+    if [[ ${ANDROID_PERMISSION_COUNT} == "" && ${NEW_APK_SIZE} == ""  ]]; then
     printf "0 alert\n" >> quality_report.txt
     fi
     printf "\n\n" >> quality_report.txt
@@ -184,10 +173,10 @@ fi
 
 if [[ ${check_ios} == "yes" ]]; then
     printf ">>>>>>>>>>  IOS  <<<<<<<<<< \n" >> quality_report.txt
-    if [[ ${IOS_PERMISSIONS_COUNT} != "" ]]; then
+    if [[ ${IOS_PERMISSION_COUNT} != "" ]]; then
     printf "!!! New iOS permissions have been added !!!\n" >> quality_report.txt
     printf "We had: $ios_permission_count permissions \n" >> quality_report.txt
-    printf "And now: $IOS_PERMISSIONS_COUNT permissions \n" >> quality_report.txt
+    printf "And now: $IOS_PERMISSION_COUNT permissions \n" >> quality_report.txt
     printf "You can see list of permissions into list_ios_permissions.txt \n\n" >> quality_report.txt
     fi
     if [[ ${NEW_IPA_SIZE} != "" ]]; then
@@ -195,7 +184,7 @@ if [[ ${check_ios} == "yes" ]]; then
     printf "It weighed: $ios_ipa_size MB \n" >> quality_report.txt
     printf "And now: $NEW_IPA_SIZE MB \n\n" >> quality_report.txt
     fi
-    if [[ ${IOS_PERMISSIONS_COUNT} == "" && ${NEW_IPA_SIZE} == ""  ]]; then
+    if [[ ${IOS_PERMISSION_COUNT} == "" && ${NEW_IPA_SIZE} == ""  ]]; then
     printf "0 alert\n" >> quality_report.txt
     fi
     printf "\n\n" >> quality_report.txt
@@ -203,7 +192,7 @@ fi
 
 cp quality_report.txt /Users/vagrant/deploy/quality_report.txt || true
 
-if [[ ${ANDROID_PERMISSIONS_COUNT} != "" || ${NEW_APK_SIZE} != "" || ${IOS_PERMISSIONS_COUNT} != "" || ${NEW_IPA_SIZE} != ""  ]]; then
+if [[ ${ANDROID_PERMISSION_COUNT} != "" || ${NEW_APK_SIZE} != "" || ${IOS_PERMISSION_COUNT} != "" || ${NEW_IPA_SIZE} != ""  ]]; then
     echo "Generate an error due to quality alert"
     exit 1
 fi
