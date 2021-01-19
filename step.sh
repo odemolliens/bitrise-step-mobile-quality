@@ -30,7 +30,7 @@ source build_config/released_app_infos.sh
 
 # dl artifacts list
 if [[ ${outside_build_slug} != ""  ]]; then
-    BUILD_ARTIFACTS=$(curl -X GET "https://api.bitrise.io/v0.1/apps/${BITRISE_APP_SLUG}/builds/${outside_build_slug}/artifacts" -H "accept: application/json" -H "Authorization: ${BITRISE_TOKEN}")
+    BUILD_ARTIFACTS=$(curl -X GET "https://api.bitrise.io/v0.1/apps/${BITRISE_APP_SLUG}/builds/\"${outside_build_slug}\"/artifacts" -H "accept: application/json" -H "Authorization: ${BITRISE_TOKEN}")
 fi
 
 if [[ ${check_android} == "yes" ]]; then
@@ -47,7 +47,7 @@ if [[ ${check_android} == "yes" ]]; then
         ANDROID_DATA_SLUG=$(echo $ANDROID_DATA_FROM_ARTIFACTS | jq '.slug' | sed 's/"//g')
         ANDROID_NEW_APP_SIZE=$(echo $ANDROID_DATA_FROM_ARTIFACTS | jq '.file_size_bytes' | sed 's/"//g')
         ANDROID_NEW_APP_SIZE_MB=$(echo "$ANDROID_NEW_APP_SIZE / 1024^2" | bc)
-        ANDROID_APK_URL=$(curl -X GET "https://api.bitrise.io/v0.1/apps/${BITRISE_APP_SLUG}/builds/${outside_build_slug}/artifacts/${ANDROID_DATA_SLUG}" -H "accept: application/json" -H "Authorization: ${BITRISE_TOKEN}" | jq '.data.expiring_download_url' | sed 's/"//g')
+        ANDROID_APK_URL=$(curl -X GET "https://api.bitrise.io/v0.1/apps/${BITRISE_APP_SLUG}/builds/\"${outside_build_slug}\"/artifacts/${ANDROID_DATA_SLUG}" -H "accept: application/json" -H "Authorization: ${BITRISE_TOKEN}" | jq '.data.expiring_download_url' | sed 's/"//g')
 
         # download android apk
         curl -X GET ${ANDROID_APK_URL} -o android.apk
@@ -103,7 +103,7 @@ if [[ ${check_ios} == "yes" ]]; then
         IOS_DATA_SLUG=$(echo $IOS_DATA_FROM_ARTIFACTS | jq '.slug' | sed 's/"//g')
         IOS_NEW_APP_SIZE=$(echo $IOS_DATA_FROM_ARTIFACTS | jq '.file_size_bytes' | sed 's/"//g')
         IOS_NEW_APP_SIZE_MB=$(echo "$IOS_NEW_APP_SIZE / 1024^2" | bc)
-        IOS_IPA_URL=$(curl -X GET "https://api.bitrise.io/v0.1/apps/${BITRISE_APP_SLUG}/builds/${outside_build_slug}/artifacts/${IOS_DATA_SLUG}" -H "accept: application/json" -H "Authorization: ${BITRISE_TOKEN}" | jq '.data.expiring_download_url' | sed 's/"//g')
+        IOS_IPA_URL=$(curl -X GET "https://api.bitrise.io/v0.1/apps/${BITRISE_APP_SLUG}/builds/\"${outside_build_slug}\"/artifacts/${IOS_DATA_SLUG}" -H "accept: application/json" -H "Authorization: ${BITRISE_TOKEN}" | jq '.data.expiring_download_url' | sed 's/"//g')
 
         # dl ios ipa
         curl -X GET ${IOS_IPA_URL} -o ios.ipa
