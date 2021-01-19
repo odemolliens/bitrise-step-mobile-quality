@@ -8,7 +8,7 @@
 # - Bitrise CLI guides: http://devcenter.bitrise.io/bitrise-cli/
 
 title: |-
-  steps-mobile-quality
+  Mobile app quality check & monitor
 summary: |
   Check and monitor mobile application's quality
 description: |
