@@ -56,12 +56,13 @@ The asterisks (*) mean mandatory keys
 
 ## Outputs
 
-|Key             |Value type                     |Description        
-|----------------|-------------|--------------|--------------|
+|Key             |Value type    |Description
+|----------------|-------------|--------------|
 |IOS_PERMISSION_COUNT |String |New generated iOS app's permission count|
 |NEW_IPA_SIZE |String |New generated iOS app's size|
 |ANDROID_PERMISSION_COUNT |String |New generated Android app's permission count|
 |NEW_APK_SIZE |String |New generated Android app's size|
+
 <br />
 
 ### Config file example
